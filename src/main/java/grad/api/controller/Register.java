@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import grad.api.CRUD.mng_CRUD;
+import grad.api.CRUD.*;
+import grad.api.Entities.login;
 import grad.api.Entities.manager;
 
 @CrossOrigin 
@@ -26,9 +27,15 @@ public class Register {
     
     @RequestMapping (value = "/register" ,method = RequestMethod.POST)
     public  ResponseEntity<manager> register (@Valid @RequestBody manager mng){
+        manager manager = mcr.add_mng(mng);   
+    	
+    	   login l = new login();	
+    	l.setPassword(manager.getComp_passwd());
+    	l.setType("manager");
+    	l.setUsername(manager.getComp_email());
+    	l.setUser_id(manager.getId());
            
-  
-           mcr.add_mng(mng);
+    	mcr.insert_login(l);
            
            HttpHeaders http = new HttpHeaders();
            http.add("token", "bahy");

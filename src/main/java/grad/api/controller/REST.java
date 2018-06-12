@@ -201,11 +201,20 @@ public class REST {
     @RequestMapping(value = "/add_empl" , method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
     public employee add_emp(@RequestBody employee emp , Principal p) {
     	  manager mng = new manager();
-    	  int id  = Integer.parseInt(p.getName());
-    	  
+    	  int id  = Integer.parseInt(p.getName()); 	  
     	  mng=mcr.get_info(id);
     	    
-    	      mcr.emp_mng(id,	cr.add_empl(emp));
+    	  employee empl =cr.add_empl(emp);
+    	  
+    	  login l = new login();	
+      	l.setPassword(empl.getEmp_passwd());
+      	l.setType("employee");
+      	l.setUsername(empl.getEmp_email());
+      	l.setUser_id(empl.getEmp_id());
+
+      	mcr.insert_login(l);
+      	
+    	      mcr.emp_mng(id,	emp);
 return emp;
     } 
     

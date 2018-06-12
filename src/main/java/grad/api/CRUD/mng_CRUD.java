@@ -26,6 +26,33 @@ import org.springframework.stereotype.Service;
 @Service
 public class mng_CRUD {
 	
+	
+	
+	
+	public void insert_login(login login) {
+		Session se = NewHibernateUtil.getSessionFactory().openSession();
+		Transaction tr = null;
+		
+		try {
+			
+			tr =se.beginTransaction();
+			se.save(login);
+			tr.commit();
+			
+		   } catch (Exception e) {
+			    if(tr!= null){
+			    tr.rollback();
+			    }
+			         e.printStackTrace();
+			            System.out.println(e.getMessage() + "herererer");
+			        } finally {
+			            se.flush();
+			            se.close();
+			        }
+
+		
+	}
+	
 	public manager update_mng (int id , manager mng ) {
 
 		Session se = NewHibernateUtil.getSessionFactory().openSession();
@@ -199,13 +226,14 @@ public class mng_CRUD {
 	
 	
 	
-	public void add_mng(manager mng){
+	public manager add_mng(manager mng){
     Session se = NewHibernateUtil.getSessionFactory().openSession();
         Transaction tr = null;
+        manager manager =mng;
         try {
             tr = se.beginTransaction();
 
-            se.save(mng);
+            se.save(manager);
             tr.commit();
 
         } catch (Exception e) {
@@ -217,7 +245,9 @@ public class mng_CRUD {
         } finally {
             se.flush();
             se.close();
-        }}   
+        }
+        return manager;
+	}   
 
 public manager login(String email , String passwd){
 Session se = NewHibernateUtil.getSessionFactory().openSession();
@@ -460,22 +490,23 @@ public List<task> get_allTasks(int id) {
 
 
 
-public manager check_mngr (String email ) {
+public login check_login (String email ) {
 	Session se = NewHibernateUtil.getSessionFactory().openSession();
 	Transaction tr = null;
-	manager res = new manager();
-	List<manager> list= new ArrayList<manager>();
+	
+	List<login> list= new ArrayList<login>();
 	    try {
 	        tr=se.beginTransaction();
-	        Criteria q = se.createCriteria(manager.class);
+	        Criteria q = se.createCriteria(login.class);
 	        
-	      Criterion c1 = Restrictions.eq("comp_email", email);
+	      Criterion c1 = Restrictions.eq("username", email);
 
 //	        LogicalExpression and = Restrictions.and(c1, c2);
 	        
 
 	       list=  q.add(c1).list();
 	     if (list.size()>0) {
+	    	 System.out.println("Login successsssss");
 			return list.get(0);
 		}
 	        

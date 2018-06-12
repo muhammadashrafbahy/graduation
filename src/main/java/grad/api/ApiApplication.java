@@ -25,16 +25,11 @@ public class ApiApplication {
 
 	@Autowired
 public void authenticationManager(AuthenticationManagerBuilder builder , mng_CRUD repo ) throws Exception {
-	builder.userDetailsService(s -> new customUserDetails(repo.check_mngr(s)));
+	builder.userDetailsService(s -> new customUserDetails(repo.check_login(s)));
 	
 	
 } 	
 	
 	
-	@Autowired
-public void authenticationManager_emp(AuthenticationManagerBuilder builder , employee_crud repo ) throws Exception {
-	builder.userDetailsService(s -> new CustomEmployeeDetails(repo.check_employee(s)) );
 	
-	
-} 	
 }

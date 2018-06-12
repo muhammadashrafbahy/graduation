@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import grad.api.Entities.manager;
+import grad.api.Entities.*;
 
 public class customUserDetails implements UserDetails {
   
@@ -18,12 +18,12 @@ public class customUserDetails implements UserDetails {
 	
 	
 	
-	public customUserDetails( manager mng) {
+	public customUserDetails( login mng) {
 
 		
-		this.username=mng.getComp_email();
-	    this.passwd=mng.getComp_passwd();
-	    this.id = mng.getId();
+		this.username=mng.getUsername();
+	    this.passwd=mng.getPassword();
+	    this.id = mng.getUser_id();
 	
 	}
 

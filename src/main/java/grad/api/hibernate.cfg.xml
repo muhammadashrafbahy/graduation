@@ -14,5 +14,6 @@
     <mapping class="grad.api.Entities.employee"/>
     <mapping class="grad.api.Entities.manager"/>
     <mapping class="grad.api.Entities.task"/>
+    <mapping class="grad.api.Entities.login"/>
   </session-factory>
 </hibernate-configuration>
