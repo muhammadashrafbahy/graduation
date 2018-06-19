@@ -28,27 +28,27 @@ public class manager {
   
     private int mng_id ;
     
-    @NotNull
-    @Size(min=1)
+//    @NotNull
+//    @Size(min=1)
     private String comp_name;
-    @NotNull
-    @Size(min=1)
+//    @NotNull
+//    @Size(min=1)
     private String comp_passwd;
-    @NotNull
-    @Email
+//    @NotNull
+//    @Email
     private String comp_email;
     private String comp_website;
     private String comp_field;
-    @NotNull
+//    @NotNull
     private String comp_country;
-    @NotNull
+//    @NotNull
     private String comp_city;
-    @NotNull
+//    @NotNull
     private String comp_dist;
-    @NotNull
+//    @NotNull
     @Min(value=1)
     private Double comp_long;
-    @NotNull
+//    @NotNull
     @Min(value=1)
     private Double comp_lat;
     private String comp_phone;
