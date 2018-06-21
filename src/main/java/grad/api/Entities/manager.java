@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Email;
 
 
@@ -24,6 +25,7 @@ import org.hibernate.validator.constraints.Email;
 @JsonIgnoreProperties({"empl_list","tsk_list","cl_list"})
 
 @Entity
+@DynamicUpdate
 public class manager {
   
     private int mng_id ;
@@ -46,10 +48,10 @@ public class manager {
 //    @NotNull
     private String comp_dist;
 //    @NotNull
-    @Min(value=1)
+//    @Min(value=1)
     private Double comp_long;
 //    @NotNull
-    @Min(value=1)
+//    @Min(value=1)
     private Double comp_lat;
     private String comp_phone;
     private List<task> tsk_list = new ArrayList<task>();

@@ -7,12 +7,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import grad.api.CRUD.employee_crud;
 import grad.api.CRUD.mng_CRUD;
 
 
 @SpringBootApplication
+@CrossOrigin
 //@EnableAutoConfiguration
 //@ComponentScan({"grad.api","grad.api.CRUD","grad.api.authorization"})
 //

@@ -53,6 +53,49 @@ public class mng_CRUD {
 		
 	}
 	
+	public login update_login (int id , login log ) {
+
+		Session se = NewHibernateUtil.getSessionFactory().openSession();
+		Transaction tr = null;
+		List<login> res = new ArrayList<login>();
+		login n_mng = new login();
+		    try {
+		    	
+		        tr=se.beginTransaction();
+		        Criteria q = se.createCriteria(login.class);
+		        
+		      
+		        
+//		        LogicalExpression and = Restrictions.and(c1, c2);
+		        
+		        n_mng= (login) q.add(Restrictions.eq("user_id", id)).list().get(0);
+		        
+		        if (n_mng!= null) {
+		        	n_mng.setUser_id(id);
+		        	n_mng.setPassword(log.getPassword());
+		        	n_mng.setType("manager");
+		        	n_mng.setUsername(log.getUsername());
+		        	
+		        	se.update(n_mng);
+				}
+		     
+		        
+		    } catch (Exception e) {
+		    if(tr!= null){
+		    tr.rollback();
+		    }
+		         e.printStackTrace();
+		            System.out.println(e.getMessage() + "herererer");
+		        } finally {
+		            se.flush();
+		            se.close();
+		        }
+
+		return log;
+		
+		
+		
+	}
 	public manager update_mng (int id , manager mng ) {
 
 		Session se = NewHibernateUtil.getSessionFactory().openSession();
@@ -60,6 +103,7 @@ public class mng_CRUD {
 		List<manager> res = new ArrayList<manager>();
 		manager n_mng = new manager();
 		    try {
+		    	
 		        tr=se.beginTransaction();
 		        Criteria q = se.createCriteria(manager.class);
 		        
@@ -67,11 +111,23 @@ public class mng_CRUD {
 		        
 //		        LogicalExpression and = Restrictions.and(c1, c2);
 		        
-		        res=  q.add(Restrictions.eq("id", id)).list();
+		        n_mng= (manager) q.add(Restrictions.eq("id", id)).list().get(0);
 		        
-		        if (res.size() >0) {
-		        	mng.setId(id);
-		        	se.update(mng);
+		        if (n_mng!= null) {
+		        	n_mng.setId(id);
+		        	n_mng.setComp_city("");
+		        	n_mng.setComp_country("");
+		        	n_mng.setComp_dist("");
+		        	n_mng.setComp_email(mng.getComp_email());
+		        	n_mng.setComp_field(mng.getComp_field());
+		        	n_mng.setComp_lat(mng.getComp_lat());
+		        	n_mng.setComp_long(mng.getComp_long());
+		        	n_mng.setComp_name(mng.getComp_name());
+		        	n_mng.setComp_passwd(mng.getComp_passwd());
+		        	n_mng.setComp_phone(mng.getComp_phone());
+		        	n_mng.setComp_website(mng.getComp_website());
+		        	
+		        	se.update(n_mng);
 				}
 		     
 		        
@@ -91,6 +147,8 @@ public class mng_CRUD {
 		
 		
 	}
+	
+	
 	
 	
 	public manager tsk_mng (int id , task tsk ) {
@@ -541,7 +599,7 @@ public login check_login (String email ) {
         mng_CRUD cr = new mng_CRUD();
 //        cr.add_mng(mng);
         
-        
+        cr.update_mng(20, mng);
 //        
 //        Date d1= new Date(2020, 12, 31);
 //        Date d2 = new Date(2024, 12, 31);
@@ -563,7 +621,7 @@ public login check_login (String email ) {
 //        cr.get_allTasks(1);
         
         
-mng= cr.login("@yahoo","passwd1");
+//mng= cr.login("@yahoo","passwd1");
 //        List<manager> list= cr.all_comp();
 //        for (int i = 0; i < list.size(); i++) {
 //            manager elem = list.get(i);

@@ -71,6 +71,19 @@ public class REST {
     
     
     
+    //update employee
+    @RequestMapping(value = "/update_mng" , method = RequestMethod.PUT,consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
+    public manager update_mng( @RequestBody  manager mng , Principal p ) {
+    	
+    		int id =Integer.parseInt(p.getName());
+    		System.out.println("updated manager id "+id);
+    		
+    		login log = new login(id, mng.getComp_email(), mng.getComp_passwd(), "manager");
+    		mcr.update_login(id, log);
+          manager res =mcr.update_mng(id, mng);
+return res;
+    } 
+    
     
     
     //get all companies
