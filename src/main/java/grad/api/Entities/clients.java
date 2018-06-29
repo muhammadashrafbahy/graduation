@@ -23,8 +23,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class clients {
 
      private int client_id;
-     private int client_long;
-     private int client_lat;
+     private Double client_long;
+     private Double client_lat;
      private String client_fname;
      private String client_lname;
      private String client_phone;
@@ -39,7 +39,7 @@ public class clients {
 
   
 
-    public clients(int client_long, int client_lat, String client_fname, String client_lname, String client_phone,
+    public clients(Double client_long, Double client_lat, String client_fname, String client_lname, String client_phone,
 			String client_country, String client_city, String client_distr) {
 	
 		this.client_long = client_long;
@@ -55,19 +55,19 @@ public class clients {
 
 
 
-	public int getClient_long() {
+	public Double getClient_long() {
         return client_long;
     }
 
-    public void setClient_long(int client_long) {
+    public void setClient_long(Double client_long) {
         this.client_long = client_long;
     }
 
-    public int getClient_lat() {
+    public Double getClient_lat() {
         return client_lat;
     }
 
-    public void setClient_lat(int client_lat) {
+    public void setClient_lat(Double client_lat) {
         this.client_lat = client_lat;
     }
 
@@ -140,14 +140,14 @@ public class clients {
 		this.cat = cat;
 	}
 
-		@OneToMany (cascade = CascadeType.ALL , targetEntity = task.class)
-//    @JoinTable (name = "client_task" , joinColumns = {@JoinColumn(name="client-id")},inverseJoinColumns = {@JoinColumn(name="task_id")} )
-    public List<task> getTask_list() {
-        return task_list;
-    }
-
-    public void setTask_list(List<task> task_list) {
-        this.task_list = task_list;
-    }
+//		@OneToMany (cascade = CascadeType.ALL , targetEntity = task.class)
+////    @JoinTable (name = "client_task" , joinColumns = {@JoinColumn(name="client-id")},inverseJoinColumns = {@JoinColumn(name="task_id")} )
+//    public List<task> getTask_list() {
+//        return task_list;
+//    }
+//
+//    public void setTask_list(List<task> task_list) {
+//        this.task_list = task_list;
+//    }
     
 }

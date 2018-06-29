@@ -168,13 +168,51 @@ public category cl_cat(int  id , clients cl) {
 	Transaction tr= null;
 	category cat = new category();
 	List<clients > cl_list = new ArrayList<clients>();
-cl_list.add(cl);
+
 	try {
 		tr = se.beginTransaction();
 	Criteria q = se.createCriteria(category.class);
 	cat=(category) q.add(Restrictions.eq("categ_id", id)).list().get(0);
-
+	cl_list.add(cl);
 	cat.setClient_list(cl_list);
+	se.update(cat);
+
+tr.commit();
+
+  } catch (Exception e) {
+        if (tr != null) {
+            tr.rollback();
+        }
+        e.printStackTrace();
+        System.out.println(e.getMessage() + "herererer");
+    } finally {
+        se.flush();
+        se.close();
+    }
+	
+	
+	return cat;
+	
+}
+
+public category delete_cl_cat(int cat_id,int  id ) {
+	
+	Session se = NewHibernateUtil.getSessionFactory().openSession();
+	Transaction tr= null;
+	category cat = new category();
+	List<clients > cl_list = new ArrayList<clients>();
+	List<clients > result = new ArrayList<clients>();
+	try {
+		tr = se.beginTransaction();
+	Criteria q = se.createCriteria(category.class);
+	cat=(category) q.add(Restrictions.eq("categ_id", cat_id)).list().get(0);
+	for (clients clients : cl_list) {
+		
+		if (clients.getClients_id()!=id ) {
+			result.add(clients);
+		}
+	}
+	cat.setClient_list(result);
 	se.update(cat);
 
 tr.commit();

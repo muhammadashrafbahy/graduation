@@ -26,49 +26,28 @@ public class task {
     private Date Start_date;   
     private String task_descript;
     private String task_name;
-    private String task_city;
-    private String task_country;
-    private String task_dist;
+    private String task_address;
+ 
     private String client_name;
+    
     private String state;
-    public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
+   
+	private String emp_name;
 	private int emp_id;
+	
     private employee emp;
    
     
     
-    @ManyToOne (cascade = CascadeType.ALL , targetEntity=employee.class)
-    public employee getEmp() {
-		return emp;
-	}
 
-	public void setEmp(employee emp) {
-		this.emp = emp;
-	}
-	
-	private clients cl;
-	@ManyToOne (cascade = CascadeType.ALL , targetEntity=clients.class)
-	
- public clients getCl() {
-		return cl;
-	}
-
-	public void setCl(clients cl) {
-		this.cl = cl;
-	}
+//	private clients cl;
+//	
 
 	public task() {
     }
 
    
-	public task(String client_name,String state ,int emp_id, Double task_long, Double task_lat, Date Start_date, Date exp_date, String task_descript, String task_name, String task_city, String task_country, String task_dist) {
+	public task(String client_name,String state ,String emp_name,int emp_id, Double task_long, Double task_lat, Date Start_date, Date exp_date, String task_descript, String task_name, String task_address) {
        
         this.task_long = task_long;
         this.task_lat = task_lat;
@@ -77,12 +56,11 @@ public class task {
         this.Start_date = Start_date;
         this.task_descript = task_descript;
         this.task_name = task_name;
-        this.task_city = task_city;
-        this.task_country = task_country;
-        this.task_dist = task_dist;
+        this.task_address=task_address;
        this.client_name =client_name;
        this.state=state;
-       this.emp_id =emp_id;
+       this.emp_name =emp_name;
+       this.emp_id=emp_id;
     }
    @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
@@ -95,8 +73,7 @@ public class task {
         this.task_id = task_id;
     }
 
-    @Max(value=100)
-    @Min(value=0)
+ 
     public Double getTask_long() {
         return task_long;
     }
@@ -105,8 +82,6 @@ public class task {
         this.task_long = task_long;
     }
 
-    @Max(value=100)
-    @Min(value=0)
     public Double getTask_lat() {
         return task_lat;
     }
@@ -116,7 +91,7 @@ public class task {
     }
 
     
-    @Future
+ 
     public Date getExp_date() {
         return exp_date;
     }
@@ -126,7 +101,7 @@ public class task {
     }
     
     
-    @Future
+  
     public Date getStart_date() {
         return Start_date;
     }
@@ -146,7 +121,7 @@ public class task {
     }
 
      
-    @Size(min=10 )
+    
     public String getTask_name() {
         return task_name;
     }
@@ -156,32 +131,18 @@ public class task {
     }
     
     
-    
-    public String getTask_city() {
-        return task_city;
-    }
 
-    public void setTask_city(String task_city) {
-        this.task_city = task_city;
-    }
+    public String getTask_address() {
+		return task_address;
+	}
 
-    public String getTask_country() {
-        return task_country;
-    }
 
-    public void setTask_country(String task_country) {
-        this.task_country = task_country;
-    }
+	public void setTask_address(String task_address) {
+		this.task_address = task_address;
+	}
 
-    public String getTask_dist() {
-        return task_dist;
-    }
 
-    public void setTask_dist(String task_dist) {
-        this.task_dist = task_dist;
-    }
-
-    public String getClient_name() {
+	public String getClient_name() {
         return client_name;
     }
 
@@ -189,15 +150,43 @@ public class task {
         this.client_name = client_name;
     }
 
+	public String getEmp_name() {
+		return emp_name;
+	}
+
+	public void setEmp_name(String emp_name) {
+		this.emp_name = emp_name;
+	}
+	
+	
+	 public String getState() {
+			return state;
+		}
+
+		public void setState(String state) {
+			this.state = state;
+		}
+		
+		
 
     public int getEmp_id() {
-        return emp_id;
-    }
+			return emp_id;
+		}
 
-    public void setEmp_id(int emp_id) {
-        this.emp_id = emp_id;
-    }
-    
-    
+
+		public void setEmp_id(int emp_id) {
+			this.emp_id = emp_id;
+		}
+
+
+	@ManyToOne (cascade = CascadeType.ALL , targetEntity=employee.class)
+    public employee getEmp() {
+		return emp;
+	}
+
+	public void setEmp(employee emp) {
+		this.emp = emp;
+	}
+	
 
 }

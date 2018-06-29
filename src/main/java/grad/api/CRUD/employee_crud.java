@@ -108,6 +108,53 @@ System.out.println(new_emp.getEmp_username());
 	
 	}  
 	
+	public boolean update_location(int id , employee emp) {
+		Session se = NewHibernateUtil.getSessionFactory().openSession();
+		Transaction tr= null;
+		employee new_emp ;
+		try {
+			
+			tr= se.beginTransaction();
+			Criteria q = se.createCriteria(employee.class);
+			new_emp= (employee) q.add(Restrictions.eq("emp_id", id)).list().get(0);
+			if (new_emp!= null) {
+				new_emp.setEmp_Bdate(new_emp.getEmp_Bdate());
+				new_emp.setEmp_city(new_emp.getEmp_city());
+				new_emp.setEmp_country(new_emp.getEmp_country());
+				new_emp.setEmp_distr(new_emp.getEmp_distr());
+				new_emp.setEmp_email(new_emp.getEmp_email());
+				new_emp.setEmp_fname(new_emp.getEmp_fname());
+				new_emp.setEmp_id(id);
+				new_emp.setEmp_lat(emp.getEmp_lat());
+				new_emp.setEmp_lname(new_emp.getEmp_lname());
+				new_emp.setEmp_long(emp.getEmp_long());
+				new_emp.setEmp_passwd(new_emp.getEmp_passwd());
+				new_emp.setEmp_phone(new_emp.getEmp_phone());
+				new_emp.setEmp_Regist_date(new_emp.getEmp_Regist_date());
+				new_emp.setEmp_salary(new_emp.getEmp_salary());
+				new_emp.setEmp_username(new_emp.getEmp_username());
+
+				se.update(new_emp);
+				System.out.println("employee updated");
+				return true;
+		
+			}
+		tr.commit();
+
+		  } catch (Exception e) {
+	            if (tr != null) {
+	                tr.rollback();
+	            }
+	            e.printStackTrace();
+	            System.out.println(e.getMessage() + "herererer");
+	        } finally {
+	            se.flush();
+	            se.close();
+	        }
+	return false;	
+	
+	}  
+	
 	
 	public List<employee>  search_empl_name(String name) {
 		Session se = NewHibernateUtil.getSessionFactory().openSession();
@@ -198,6 +245,89 @@ System.out.println(new_emp.getEmp_username());
 	
 	}  
 	
+	public String delete_taskFORempl(int id ) {
+		Session se = NewHibernateUtil.getSessionFactory().openSession();
+		Transaction tr= null;
+		List<task > tsk_list = new ArrayList<task>();
+		
+		employee new_emp ;
+		try {
+			
+			tr= se.beginTransaction();
+			Criteria q = se.createCriteria(employee.class);
+			new_emp= (employee) q.add(Restrictions.eq("emp_id", id)).list().get(0);
+			if (new_emp!= null) {
+				tsk_list= new_emp.getTask_list();
+				tsk_list.clear();
+			      new_emp.setTask_list(tsk_list);
+
+				se.update(new_emp);
+				System.out.println("employee updated");
+				return "employee updated";
+		
+			}
+		tr.commit();
+
+		  } catch (Exception e) {
+	            if (tr != null) {
+	                tr.rollback();
+	            }
+	            e.printStackTrace();
+	            System.out.println(e.getMessage() + "herererer");
+	        } finally {
+	            se.flush();
+	            se.close();
+	        }
+	return "cannot found this employee";	
+	
+	}  
+
+	public String delete_task_empl(int id ,int tsk_id) {
+		Session se = NewHibernateUtil.getSessionFactory().openSession();
+		Transaction tr= null;
+		List<task > tsk_list = new ArrayList<task>();
+		List<task > result = new ArrayList<task>();
+		employee new_emp ;
+		try {
+			
+			tr= se.beginTransaction();
+			Criteria q = se.createCriteria(employee.class);
+			new_emp= (employee) q.add(Restrictions.eq("emp_id", id)).list().get(0);
+			if (new_emp!= null) {
+				tsk_list= new_emp.getTask_list();
+				for (task task : tsk_list) {
+					if(task.getTask_id()!=tsk_id) {
+						
+						result.add(task);
+					}
+					
+				}
+				
+				
+			      new_emp.setTask_list(result);
+
+				se.update(new_emp);
+				System.out.println("employee updated");
+				return "employee updated";
+		
+			}
+		tr.commit();
+
+		  } catch (Exception e) {
+	            if (tr != null) {
+	                tr.rollback();
+	            }
+	            e.printStackTrace();
+	            System.out.println(e.getMessage() + "herererer");
+	        } finally {
+	            se.flush();
+	            se.close();
+	        }
+	return "cannot found this employee";	
+	
+	}  
+	
+	
 	
 	public employee get_empl ( int id) {
 		Session se = NewHibernateUtil.getSessionFactory().openSession();
@@ -254,6 +384,71 @@ tr.commit();
 	            se.flush();
 	            se.close();
 	        }return tsk_list;
+	     
+		
+	}
+    
+	
+	public List<task> get_ALlTasks_foremp( int id ,int state) {
+		Session se = NewHibernateUtil.getSessionFactory().openSession();
+		Transaction tr= null;
+		employee new_emp = new employee();
+		List<task> tsk_list = new ArrayList<task>();
+		List<task> result = new ArrayList<task>();
+
+		try {
+			tr= se.beginTransaction();
+			Criteria q = se.createCriteria(employee.class);
+			new_emp= (employee) q.add(Restrictions.eq("emp_id", id)).list().get(0);
+//System.out.println("employee name => "+new_emp.getEmp_username());
+        tsk_list=  new_emp.getTask_list();		  
+       
+	        if (state==1) {
+	        	System.out.println("Done state");
+	        	for (task task : tsk_list) {
+					if(task.getState().equals("Done")) {
+						result.add(task);
+					}
+				}
+	        	
+	        }
+	        else  if (state==0) {
+	        	
+	        	for (task task : tsk_list) {
+					if(task.getState().equals("notDone")) {
+						
+						result.add(task);
+					}
+				}
+	        	
+	        }
+else  if (state==2) {
+	        	
+	        	for (task task : tsk_list) {
+					if(task.getState().equals("inProgress")) {
+						
+						result.add(task);
+					}
+				}
+	        	
+	        }
+         for (task task : result) {
+        	System.out.println("task name => "+ task.getTask_name() );
+        }
+         
+         System.out.println("result tasks size"+result.size());
+        tr.commit();
+
+		  } catch (Exception e) {
+	            if (tr != null) {
+	                tr.rollback();
+	            }
+	            e.printStackTrace();
+	            System.out.println(e.getMessage() + "herererer");
+	        } finally {
+	            se.flush();
+	            se.close();
+	        }return result;
 	     
 		
 	}
@@ -433,9 +628,11 @@ employee_crud cr = new employee_crud();
 
 Date d1= new Date(2020, 12, 31);
 Date d2 = new Date(2024, 12, 31);
-task tsk = new task( "bahy","notDone",1,1.0, 2.0, d1, d2,  "desc", "taskat ya bahy", "cairo", "egypt", "kafr");
+//task tsk = new task( "bahy","notDone",1,1.0, 2.0, d1, d2,  "desc", "taskat ya bahy", "cairo", "egypt", "kafr");
  task_crud tcr = new task_crud();
  
+ 
+ cr.get_ALlTasks_foremp(20, 0);
 //cr.task_empl(5, tcr.add_task(tsk));
 
 //employee e = new employee();

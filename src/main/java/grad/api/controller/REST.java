@@ -38,7 +38,7 @@ public class REST {
     client_crud ccr = new client_crud();
     category_crud ctc = new category_crud();
   
-    
+    task_crud tcr = new task_crud();
     
  
     
@@ -97,7 +97,7 @@ return res;
     }
     
     //get all employees for a manager
-    @RequestMapping(value = "/mng/allempl" , method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE )
+    @RequestMapping(value = "/mng/allempl" , method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE )
     public List<employee> mng_Allemp(Principal prin){
 //    public String all_comp(){
 //    prin.getName();//get the access user name
@@ -108,7 +108,7 @@ return res;
     }
     
     //get all clients for a manager
-    @RequestMapping(value = "/mng/allcl" , method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE )
+    @RequestMapping(value = "/mng/allcl" , method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE )
     public List<clients> mng_Allcl(Principal prin){
 //    public String all_comp(){
     	int id =Integer.parseInt(prin.getName());
@@ -118,7 +118,7 @@ return res;
     }
     
     //get all tasks for a manager
-    @RequestMapping(value = "/mng/alltasks" , method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE )
+    @RequestMapping(value = "/mng/alltasks" , method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE )
     public List<task> mng_Alltsk(Principal prin){
 //    public String all_comp(){
     	int id =Integer.parseInt(prin.getName());
@@ -152,18 +152,27 @@ return res;
     
     @RequestMapping(value="/add_task" ,method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE)
     public task add_task(@RequestBody task task , Principal p ){
-    task_crud cr = new task_crud();
+  
     manager mng = new manager();
     int id  = Integer.parseInt(p.getName());
     
     mng=mcr.get_info(id);
-    
-      mcr.tsk_mng(id,cr.add_task(task) )  ;
+    employee emp = cr.get_empl(task.getEmp_id());
+    task.setEmp_name(emp.getEmp_email());
+    task tsk =tcr.add_task(task) ;
+    cr.task_empl(tsk.getEmp_id(), tsk);	
+      mcr.tsk_mng(id,tsk)  ;
+     
     return task;
     }
    
     @RequestMapping (value="/delete_task/{task_id}" ,method = RequestMethod.DELETE ,produces = MediaType.APPLICATION_JSON_VALUE)
-    public task delet(@PathVariable("task_id") int id){
+    public task delet(@PathVariable("task_id") int id ,Principal p){
+    	int mng_id = Integer.parseInt(p.getName());
+    	manager mng = mcr.delete_tsk_mng(mng_id, id);
+    	
+    	task tsk=tcr.get_task(id);
+    	cr.delete_task_empl(tsk.getEmp_id(), id);
     
     task_crud cr= new task_crud();
     return cr.delete_task(id);
@@ -180,7 +189,8 @@ return res;
     
     @RequestMapping (value="/update_tasks/{task_id}" ,method = RequestMethod.PUT ,produces = MediaType.APPLICATION_JSON_VALUE , consumes = MediaType.APPLICATION_JSON_VALUE)
     public task update(@PathVariable("task_id") int id ,@RequestBody task task){
-    
+    employee emp = cr.get_empl(task.getEmp_id());
+    task.setEmp_name(emp.getEmp_email());
     task_crud cr= new task_crud();
     return cr.update_task(id, task);
     }
@@ -193,11 +203,11 @@ return res;
     return res;
     }
    
-    @RequestMapping(value = "/tasks/assign" , method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-    public task assign_task(@RequestBody task task){
+    @RequestMapping(value = "/tasks/assign/{emp_id}" , method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
+    public task assign_task(@RequestBody task task, @PathVariable("emp_id") int emp_id){
     
     task_crud cr = new task_crud();
-   return cr.assign_task(task.getTask_id(), task, task.getEmp_id());
+   return cr.assign_task(task.getTask_id(), task, emp_id);
     
     
     }
@@ -233,8 +243,12 @@ return emp;
     
     
     @RequestMapping(value = "/delet_empl/{emp_id}" , method = RequestMethod.DELETE,consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-    public String  delete_emp(@PathVariable("emp_id") int id ) {
-    employee emp =	cr.delete_empl(id);
+    public String  delete_emp(@PathVariable("emp_id") int id , Principal p ) {
+    	int mng_id = Integer.parseInt(p.getName());
+    mcr.delete_emp_mng(mng_id, id);
+    cr.delete_taskFORempl(id);
+    cr.delete_empl(id);
+    
 return "employee deleted";
     } 
     
@@ -273,21 +287,24 @@ return res;
     } 
     
     ///////////////////////////////////////////////////////////////////CLIENTS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-    @RequestMapping(value = "/add_clients" , method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-    public clients add_client(@RequestBody clients cl, Principal p) {
+    @RequestMapping(value = "/add_clients/{cat_id}" , method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
+    public clients add_client(@RequestBody clients cl, Principal p,@PathVariable("cat_id") int cat_id ) {
     	  manager mng = new manager();
     	  int id  = Integer.parseInt(p.getName());
   	    mng=mcr.get_info(id);
   	    clients cls =ccr.add_client(cl);
   	      mcr.cl_mng(id,  cls);
-  	      ctc.cl_cat(1, cls);
+  	      ctc.cl_cat(cat_id, cls);
 return cl;
     } 
     
     
-    @RequestMapping(value = "/delete_clients/{client_id}" , method = RequestMethod.DELETE,consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-    public String  delete_client(@PathVariable("client_id") int id ) {
-    clients emp =	ccr.delete_client(id);
+    @RequestMapping(value = "/delete_clients/{client_id}/{cat_id}" , method = RequestMethod.DELETE,consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
+    public String  delete_client(@PathVariable("client_id") int id , Principal p ,@PathVariable("cat_id") int cat_id ) {
+    	int mng_id =Integer.parseInt(p.getName());
+    	manager mng = mcr.delete_cl_mng(mng_id, id);
+    	ctc.delete_cl_cat(cat_id,id);
+    	clients emp =	ccr.delete_client(id);
 return "clients deleted";
     } 
     

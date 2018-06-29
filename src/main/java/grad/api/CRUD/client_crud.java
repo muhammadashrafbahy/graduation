@@ -157,46 +157,7 @@ public class client_crud {
 	        
 	} 
 	
-	public String tsk_cl(int id , task tsk) {
-		Session se = NewHibernateUtil.getSessionFactory().openSession();
-		Transaction tr= null;
-		clients new_cl ;
-   List<task> task_list = new ArrayList<task>(); 
-	
-   try {
-			
-			tr= se.beginTransaction();
-			Criteria q = se.createCriteria(clients.class);
-			new_cl= (clients) q.add(Restrictions.eq("clients_id", id)).list().get(0);
-			if (new_cl!= null) {
-				
-				task_list = new_cl.getTask_list();
-				task_list.add(tsk);	
-		      new_cl.setTask_list(task_list);
-				
-				
-				se.update(new_cl);
-				System.out.println("clients updated");
-				return "clients updated";
-		
-			}
-		tr.commit();
 
-		  } catch (Exception e) {
-	            if (tr != null) {
-	                tr.rollback();
-	            }
-	            e.printStackTrace();
-	            System.out.println(e.getMessage() + "herererer");
-	        } finally {
-	            se.flush();
-	            se.close();
-	        }
-	return "cannot found this clients";	
-	
-	}  
-
-	
 	public clients get_client(int id ) {
 		Session se = NewHibernateUtil.getSessionFactory().openSession();
 		Transaction tr= null;
@@ -226,45 +187,11 @@ public class client_crud {
 	}  	
 
 	
-	
-	public List<task> getAllTasks(int id ) {
-		Session se = NewHibernateUtil.getSessionFactory().openSession();
-		Transaction tr= null;
-		clients new_cl = new  clients() ;
-		List<task> tsk_list =new ArrayList<task>();
-		try {
-			
-			tr= se.beginTransaction();
-			Criteria q = se.createCriteria(clients.class);
-			new_cl= (clients) q.add(Restrictions.eq("clients_id", id)).list().get(0);
-			
-//				System.out.println("clients name =>" + new_cl.getClient_fname());
-			tsk_list = new_cl.getTask_list();
-			for (task task : tsk_list) {
-				System.out.println("task name =>" +task.getTask_name());
-			}
-		tr.commit();
-
-		  } catch (Exception e) {
-	            if (tr != null) {
-	                tr.rollback();
-	            }
-	            e.printStackTrace();
-	            System.out.println(e.getMessage() + "herererer");
-	        } finally {
-	            se.flush();
-	            se.close();
-	        }
-	return tsk_list ;	
-	
-	}  	
-	
-	
 	public static void main(String[] args) {
-clients cl = new clients(1, 1, "abed", "hamad", "01285684022", "egypt", "alex", "bishr");
+//clients cl = new clients(1, 1, "abed", "hamad", "01285684022", "egypt", "alex", "bishr");
 client_crud cr = new client_crud();
 //cr.add_client(cl);
-//cr.delete_client(11);
+cr.delete_client(15);
 //		cr.update_empl(10, cl);
 //System.out.println(cr.search_clients_name("aa").size());
 //

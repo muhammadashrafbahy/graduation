@@ -8,6 +8,7 @@ package grad.api.CRUD;
 
 import grad.api.CRUD.*;
 import grad.api.Entities.*;
+import grad.api.clients.client;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -196,11 +197,63 @@ public class mng_CRUD {
 	}
    
 
+	public manager delete_tsk_mng (int id , int tsk_id ) {
+
+		Session se = NewHibernateUtil.getSessionFactory().openSession();
+		Transaction tr = null;
+		List<task> res = new ArrayList<task>();
+		List<task> result = new ArrayList<task>();
+		manager n_mng = new manager();
+		List<manager> mg = new ArrayList<manager>();
+		    try {
+		        tr=se.beginTransaction();
+		        Criteria q = se.createCriteria(manager.class);
+		        
+		      
+		        
+//		        LogicalExpression and = Restrictions.and(c1, c2);
+		        mg =q.add(Restrictions.eq("id", id)).list();
+		        if (mg.size()>0) {
+					
+				System.out.println("founddddd mnaager");
+		        n_mng= (manager) mg.get(0);
+                res =n_mng.getTsk_list();
+
+                	for(task object: res) {
+		        	
+		        	if(object.getTask_id() !=tsk_id) {
+		        		result.add(object);
+		        	}
+		        }
+
+		         n_mng.setTsk_list(result);
+		       se.update(n_mng);
+		        }
+		        else {System.out.println("noooooooooot found");}
+		    } catch (Exception e) {
+		    if(tr!= null){
+		    tr.rollback();
+		    }
+		         e.printStackTrace();
+		            System.out.println(e.getMessage() + "herererer");
+		        } finally {
+		            se.flush();
+		            se.close();
+		        }
+
+		return n_mng;
+		
+		
+		
+	}
+   
+
 	public manager cl_mng (int id , clients cl ) {
 
 		Session se = NewHibernateUtil.getSessionFactory().openSession();
 		Transaction tr = null;
 		List<clients> res = new ArrayList<clients>();
+		
 		manager n_mng = new manager();
 		List<manager> mg = new ArrayList<manager>();
 		    try {
@@ -218,6 +271,55 @@ public class mng_CRUD {
 		        res=n_mng.getCl_list();
 		        res.add(cl);
 		         n_mng.setCl_list(res);
+		       se.update(n_mng);
+		        }
+		        else {System.out.println("noooooooooot found");}
+		    } catch (Exception e) {
+		    if(tr!= null){
+		    tr.rollback();
+		    }
+		         e.printStackTrace();
+		            System.out.println(e.getMessage() + "herererer");
+		        } finally {
+		            se.flush();
+		            se.close();
+		        }
+
+		return n_mng;
+		
+		
+		
+	}
+   
+
+	public manager delete_cl_mng (int id , int cl_id ) {
+
+		Session se = NewHibernateUtil.getSessionFactory().openSession();
+		Transaction tr = null;
+		List<clients> res = new ArrayList<clients>();
+		List<clients> result = new ArrayList<clients>();
+		manager n_mng = new manager();
+		List<manager> mg = new ArrayList<manager>();
+		    try {
+		        tr=se.beginTransaction();
+		        Criteria q = se.createCriteria(manager.class);
+		        
+		      
+		        
+//		        LogicalExpression and = Restrictions.and(c1, c2);
+		        mg =q.add(Restrictions.eq("id", id)).list();
+		        if (mg.size()>0) {
+					
+				System.out.println("founddddd mnaager");
+		        n_mng= (manager) mg.get(0);
+		        res=n_mng.getCl_list();
+       for(clients object: res) {
+		        	
+		        	if(object.getClients_id() !=cl_id) {
+		        		result.add(object);
+		        	}
+		        }
+		         n_mng.setCl_list(result);
 		       se.update(n_mng);
 		        }
 		        else {System.out.println("noooooooooot found");}
@@ -260,6 +362,56 @@ public class mng_CRUD {
 		        res=n_mng.getEmpl_list();
 		        res.add(emp);
 		         n_mng.setEmpl_list((res));
+		       se.update(n_mng);
+		        }
+		        else {System.out.println("noooooooooot found");}
+		    } catch (Exception e) {
+		    if(tr!= null){
+		    tr.rollback();
+		    }
+		         e.printStackTrace();
+		            System.out.println(e.getMessage() + "herererer");
+		        } finally {
+		            se.flush();
+		            se.close();
+		        }
+
+		return n_mng;
+		
+		
+		
+	}
+   
+	
+	public manager delete_emp_mng (int id , int emp_id ) {
+
+		Session se = NewHibernateUtil.getSessionFactory().openSession();
+		Transaction tr = null;
+		List<employee> res = new ArrayList<employee>();
+		List<employee> result = new ArrayList<employee>();
+		manager n_mng = new manager();
+		List<manager> mg = new ArrayList<manager>();
+		    try {
+		        tr=se.beginTransaction();
+		        Criteria q = se.createCriteria(manager.class);
+		        
+		      
+		        
+//		        LogicalExpression and = Restrictions.and(c1, c2);
+		        mg =q.add(Restrictions.eq("id", id)).list();
+		        if (mg.size()>0) {
+					
+				System.out.println("founddddd mnaager");
+		        n_mng= (manager) mg.get(0);
+		        res=n_mng.getEmpl_list();
+		        for(employee object: res) {
+		        	
+		        	if(object.getEmp_id() !=emp_id) {
+		        		result.add(object);
+		        	}
+		        }
+
+		         n_mng.setEmpl_list((result));
 		       se.update(n_mng);
 		        }
 		        else {System.out.println("noooooooooot found");}

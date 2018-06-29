@@ -13,6 +13,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/").permitAll()/// any user (real or anonymous) can access that resource
-                .antMatchers("/up/**").authenticated();// only the real user can see that resource 0r the uri of the resource
+                .antMatchers("/up/**").authenticated()// only the real user can see that resource 0r the uri of the resource
+        		.antMatchers("/emp/**").authenticated();
+    
     }
 }

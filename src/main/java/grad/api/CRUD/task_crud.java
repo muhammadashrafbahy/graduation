@@ -15,6 +15,7 @@ import java.util.List;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
 
+import grad.api.Entities.employee;
 import grad.api.Entities.task;
 
 /**
@@ -87,19 +88,25 @@ public class task_crud {
             if (list.size() !=0) {
                 tsknew= list.get(0);
                 tsknew.setExp_date(task.getExp_date());
-               
+                
                 tsknew.setStart_date(task.getStart_date());
-                tsknew.setTask_city(task.getTask_city());
-                tsknew.setTask_country(task.getTask_country());
+                
+                
+                
+                tsknew.setTask_address(task.getTask_address());
+                
+                
                 tsknew.setTask_descript(task.getTask_descript());
-                tsknew.setTask_dist(task.getTask_dist());
+              
                 tsknew.setTask_name(task.getTask_name());
                 tsknew.setTask_lat(task.getTask_lat());
                 tsknew.setTask_long(task.getTask_long());
                 tsknew.setClient_name(task.getClient_name());
                 tsknew.setState(task.getState());
-                tsknew.setEmp_id(task.getEmp_id());
+                tsknew.setEmp_name(task.getEmp_name());
                 tsknew.setTask_id(id);
+                
+                
                 se.update(tsknew);
           System.out.println("updated the task");  }else{
             System.out.println("can not found  the task");}
@@ -117,7 +124,70 @@ public class task_crud {
     return tsknew;
     }}
   
-
+    public boolean update_task_state(int id , int state){
+        Session se = NewHibernateUtil.getSessionFactory().openSession();
+        Transaction tr = null;
+        task tsknew =new task();
+        try {
+            tr = se.beginTransaction();
+            Criteria q = se.createCriteria(task.class);
+            List<task> list = new ArrayList<task>();
+            list = q.add(Restrictions.eq("task_id", id)).list();
+            if (list.size() !=0) {
+                tsknew= list.get(0);
+                tsknew.setExp_date(tsknew.getExp_date());
+                
+                tsknew.setStart_date(tsknew.getStart_date());
+                
+                
+                
+                tsknew.setTask_address(tsknew.getTask_address());
+                
+                
+                tsknew.setTask_descript(tsknew.getTask_descript());
+              
+                tsknew.setTask_name(tsknew.getTask_name());
+                tsknew.setTask_lat(tsknew.getTask_lat());
+                tsknew.setTask_long(tsknew.getTask_long());
+                tsknew.setClient_name(tsknew.getClient_name());
+                
+                tsknew.setEmp_name(tsknew.getEmp_name());
+                if (state==1) {
+    	        	tsknew.setState("Done");	        	
+    	        }
+    	        else  if (state==0) {
+    	        	tsknew.setState("notDone");
+        	
+    	        }
+                else  if (state==2) {
+    	            tsknew.setState("inProgress");   	
+    	        	
+    	        }
+                
+                tsknew.setTask_id(id);
+                
+                
+                se.update(tsknew);
+          System.out.println("updated the task"); 
+          return true;
+            }else{
+            System.out.println("can not found  the task");}
+            tr.commit();
+       } catch (Exception e) {
+    if(tr!= null){
+    tr.rollback();
+    }
+         e.printStackTrace();
+            System.out.println(e.getMessage() + "herererer");
+        } finally {
+            se.flush();
+            se.close();
+       
+            return true;
+    }}
+  
+    
+    
     public task repeat_task(int id , task task){
         Session se = NewHibernateUtil.getSessionFactory().openSession();
         Transaction tr = null;
@@ -134,7 +204,7 @@ public class task_crud {
                 tsknew.setStart_date(task.getStart_date());
       
                 tsknew.setState("notDone");
-                tsknew.setEmp_id(task.getEmp_id());
+                tsknew.setEmp_name(task.getEmp_name());
                 tsknew.setTask_id(id);
                 se.update(tsknew);
           System.out.println("repeated the task");  }else{
@@ -166,24 +236,20 @@ public class task_crud {
             if (list.size() !=0) {
                 tsknew= list.get(0);
                 
-                employee_crud emcr = new employee_crud();
-               
-                
-                tsknew.setExp_date(task.getExp_date());
-               
-                tsknew.setStart_date(task.getStart_date());
-                tsknew.setTask_city(task.getTask_city());
-                tsknew.setTask_country(task.getTask_country());
-                tsknew.setTask_descript(task.getTask_descript());
-                tsknew.setTask_dist(task.getTask_dist());
-                tsknew.setTask_name(task.getTask_name());
-                tsknew.setTask_lat(task.getTask_lat());
-                tsknew.setTask_long(task.getTask_long());
-                tsknew.setClient_name(task.getClient_name());
-                tsknew.setState(task.getState());
-                tsknew.setEmp_id(emp_id);
-                tsknew.setTask_id(id);
+                employee_crud emcr = new employee_crud(); 
+                emcr.delete_task_empl(tsknew.getEmp_id(), id);
                 emcr.task_empl(emp_id, tsknew);
+                
+               employee emp = emcr.get_empl(emp_id);
+               
+                tsknew.setEmp_name(emp.getEmp_email());
+                
+                tsknew.setTask_id(id);
+             
+             tsknew.setEmp_id(emp_id);
+             
+             
+             
                 se.update(tsknew);
           System.out.println("asssigned the task");  }else{
             System.out.println("can not found  the task");}
@@ -349,7 +415,7 @@ public class task_crud {
         Date d1= new Date(2020, 12, 31);
         Date d2 = new Date(2024, 12, 31);
        
-        task tsk = new task( "new","notDone",2,1.0, 2.0, d1, d2,  "desc", "taskat ya bahy", "cairo", "egypt", "kafr");
+//        task tsk = new task( "new","notDone",2,1.0, 2.0, d1, d2,  "desc", "taskat ya bahy", "cairo", "egypt", "kafr");
         task_crud cr = new task_crud();
 //        cr.add_task(tsk);
        cr.delete_task(9);
