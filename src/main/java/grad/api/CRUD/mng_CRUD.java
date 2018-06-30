@@ -496,6 +496,45 @@ manager res = new manager(); ;
 return res;
 } 
 
+
+
+public boolean check_email(String email ){
+	Session se = NewHibernateUtil.getSessionFactory().openSession();
+	Transaction tr = null;
+	
+	List<manager> list= new ArrayList<manager>();
+	    try {
+	        tr=se.beginTransaction();
+	        Criteria q = se.createCriteria(manager.class);
+	        
+	      Criterion c1 = Restrictions.eq("comp_email", email);
+
+//	        LogicalExpression and = Restrictions.and(c1, c2);
+	        
+
+	       list=  q.add(c1).list();
+	     if (list.size()>0) {
+	    	 
+	    	 System.out.println("email_exist");
+			return true;
+		}
+	        
+	    } catch (Exception e) {
+	    if(tr!= null){
+	    tr.rollback();
+	    }
+	         e.printStackTrace();
+	            System.out.println(e.getMessage() + "herererer");
+	        } finally {
+	            se.flush();
+	            se.close();
+	        }
+
+	return false;
+	
+} 
+
+
 public List<manager> all_comp(){
 Session se = NewHibernateUtil.getSessionFactory().openSession();
 Transaction tr = null;
@@ -751,8 +790,9 @@ public login check_login (String email ) {
         mng_CRUD cr = new mng_CRUD();
 //        cr.add_mng(mng);
         
-        cr.update_mng(20, mng);
+//        cr.update_mng(20, mng);
 //        
+        System.out.println(cr.check_email("bahy@gmail.com"));
 //        Date d1= new Date(2020, 12, 31);
 //        Date d2 = new Date(2024, 12, 31);
 //        task tsk = new task( "bahy",false,1,1.0, 2.0, d1, d2,  "desc", "taskat ya bahy", "cairo", "egypt", "kafr" );

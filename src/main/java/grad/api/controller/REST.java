@@ -87,14 +87,7 @@ return res;
     
     
     //get all companies
-    @RequestMapping(value = "/list" , method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE )
-    public List<manager> all_comp(Principal p){
-//    public String all_comp(){
-    System.out.println("Access user"+p.getName());
-    List<manager> list = mcr.all_comp();
-    
-   return list;
-    }
+   
     
     //get all employees for a manager
     @RequestMapping(value = "/mng/allempl" , method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE )
