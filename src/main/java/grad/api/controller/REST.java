@@ -280,14 +280,14 @@ return res;
     } 
     
     ///////////////////////////////////////////////////////////////////CLIENTS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-    @RequestMapping(value = "/add_clients/{cat_id}" , method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
-    public clients add_client(@RequestBody clients cl, Principal p,@PathVariable("cat_id") int cat_id ) {
+    @RequestMapping(value = "/add_clients" , method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
+    public clients add_client(@RequestBody clients cl, Principal p) {
     	  manager mng = new manager();
     	  int id  = Integer.parseInt(p.getName());
   	    mng=mcr.get_info(id);
   	    clients cls =ccr.add_client(cl);
   	      mcr.cl_mng(id,  cls);
-  	      ctc.cl_cat(cat_id, cls);
+  	      ctc.cl_cat(cls.getCat_id(), cls);
 return cl;
     } 
     

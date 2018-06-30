@@ -31,8 +31,9 @@ public class clients {
      private String client_country;
      private String client_city;
      private String client_distr;
-    private List<task> task_list = new ArrayList<task>();  
-  private  category cat;
+  
+    private int cat_id; 
+    private  category cat;
     public clients() {
     }
 
@@ -139,6 +140,22 @@ public class clients {
 	public void setCat(category cat) {
 		this.cat = cat;
 	}
+
+
+
+
+	public int getCat_id() {
+		return cat_id;
+	}
+
+
+
+
+	public void setCat_id(int cat_id) {
+		this.cat_id = cat_id;
+	}
+	
+	
 
 //		@OneToMany (cascade = CascadeType.ALL , targetEntity = task.class)
 ////    @JoinTable (name = "client_task" , joinColumns = {@JoinColumn(name="client-id")},inverseJoinColumns = {@JoinColumn(name="task_id")} )
