@@ -116,17 +116,17 @@ public class mng_CRUD {
 		        
 		        if (n_mng!= null) {
 		        	n_mng.setId(id);
-		        	n_mng.setComp_city("");
-		        	n_mng.setComp_country("");
-		        	n_mng.setComp_dist("");
+		        	n_mng.setComp_city(n_mng.getComp_city());
+		        	n_mng.setComp_country(n_mng.getComp_country());
+		        	n_mng.setComp_dist(n_mng.getComp_dist());
 		        	n_mng.setComp_email(mng.getComp_email());
 		        	n_mng.setComp_field(mng.getComp_field());
-		        	n_mng.setComp_lat(mng.getComp_lat());
-		        	n_mng.setComp_long(mng.getComp_long());
+		        	n_mng.setComp_lat(n_mng.getComp_lat());
+		        	n_mng.setComp_long(n_mng.getComp_long());
 		        	n_mng.setComp_name(mng.getComp_name());
-		        	n_mng.setComp_passwd(mng.getComp_passwd());
+		        	n_mng.setComp_passwd(n_mng.getComp_passwd());
 		        	n_mng.setComp_phone(mng.getComp_phone());
-		        	n_mng.setComp_website(mng.getComp_website());
+		        	n_mng.setComp_website(n_mng.getComp_website());
 		        	
 		        	se.update(n_mng);
 				}

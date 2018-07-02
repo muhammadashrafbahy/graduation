@@ -189,10 +189,11 @@ return res;
     }
     
     @RequestMapping(value = "/tasks/search" , method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<task> search_task_name (@RequestBody task task){
+    public List<task> search_task_name (@RequestBody task task ,Principal p){
+    	int mng_id = Integer.parseInt(p.getName());
     List<task> res = new ArrayList<task>();
     task_crud cr  = new task_crud();
-    res= cr.public_search(task);
+    res= cr.public_search(task , mng_id);
     return res;
     }
    

@@ -16,7 +16,9 @@ import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
 
 import grad.api.Entities.employee;
+import grad.api.Entities.manager;
 import grad.api.Entities.task;
+import grad.api.recycle.manager_crud;
 
 /**
  *
@@ -93,14 +95,14 @@ public class task_crud {
                 
                 
                 
-                tsknew.setTask_address(task.getTask_address());
+                tsknew.setTask_address(tsknew.getTask_address());
                 
                 
                 tsknew.setTask_descript(task.getTask_descript());
               
                 tsknew.setTask_name(task.getTask_name());
-                tsknew.setTask_lat(task.getTask_lat());
-                tsknew.setTask_long(task.getTask_long());
+                tsknew.setTask_lat(tsknew.getTask_lat());
+                tsknew.setTask_long(tsknew.getTask_long());
                 tsknew.setClient_name(task.getClient_name());
                 tsknew.setState(task.getState());
                 tsknew.setEmp_name(task.getEmp_name());
@@ -328,7 +330,7 @@ public class task_crud {
        
     return list;
     }}
-    public List<task> get_taskBydate(task tasks) {
+    public List<task> get_taskBydate(task tasks ) {
         Session se = NewHibernateUtil.getSessionFactory().openSession();
         Transaction tr = null;
         task tsknew =new task();
@@ -339,7 +341,7 @@ public class task_crud {
             tr = se.beginTransaction();
             Criteria q = se.createCriteria(task.class);
             
-            list = q.add(Restrictions.between("start_date", from, to)).list();
+            list = q.add(Restrictions.between("exp_date", from, to)).list();
             if (list.size() !=0) {
             System.out.println("found the task "+list.size()); 
             return list;
@@ -362,18 +364,32 @@ public class task_crud {
     }}
     
   
-    public List<task> public_search (task tsk){
+    public List<task> public_search (task tsk, int id ){
+    	System.out.println("start date "+tsk.getStart_date());
+    	System.out.println("end date"+tsk.getExp_date());
     	task_crud tcr = new task_crud();
-    	if (tsk.getClient_name()!=null) {
-	       return 		tcr.get_taskByname(tsk);
-		} 
+    	List<task> res = tcr.get_taskBydate(tsk);
+    	List<task> result = new ArrayList<>();
+    	mng_CRUD mc = new mng_CRUD();
     	
+    	manager mng = mc.get_info(id);
     	
-    	if (tsk.getStart_date()!=null|| tsk.getExp_date()!=null) {
- 	       return 		tcr.get_taskBydate(tsk);
- 		} 
+    	List<task> mng_ts= mng.getTsk_list();
+    
+    	for (task task : res) {
+    		System.out.println("firrstttt "+task.getTask_id() );
+    		for (task ss : mng_ts) {
+    				System.out.println("secconnddd "+ ss.getTask_id() + mng.getComp_email());
+    				
+				if(task.getTask_id()==ss.getTask_id()) {
+					System.out.println("founddddddddddd" +task.getTask_address());
+					result.add(task);
+				}
+			}
+		}
+ 	       return 	result;
+ 		
     	
-    	return tcr.get_taskBystatue(tsk);
     }
     
    
@@ -412,14 +428,18 @@ public class task_crud {
 //        Calendar c = Calendar.getInstance();
 ///        Date d1= c.getTime();
         
-        Date d1= new Date(2020, 12, 31);
-        Date d2 = new Date(2024, 12, 31);
-       
+        Date d1= new Date(2018, 7, 1);
+        Date d2 = new Date(2018, 7, 10);
+       task ts= new task();
+       ts.setStart_date(d1);
+       ts.setExp_date(d2);
 //        task tsk = new task( "new","notDone",2,1.0, 2.0, d1, d2,  "desc", "taskat ya bahy", "cairo", "egypt", "kafr");
         task_crud cr = new task_crud();
 //        cr.add_task(tsk);
-       cr.delete_task(9);
+//       cr.delete_task(9);
 //        cr.update_task(1, tsk);
+        cr.public_search(ts, 60);
+        
         
    Date ds1= new Date(2016, 2, 13);
         Date ds2 = new Date(2019, 2, 13);
@@ -427,7 +447,7 @@ public class task_crud {
 
 //        search.setStart_date(d1);
 //        search.setExp_date(d2);
-        search.setTask_name("new");
+//        search.setTask_name("new");
 //        List<task> list = cr.public_search(search);
 ////
 //        for (int i = 0; i < list.size(); i++) {

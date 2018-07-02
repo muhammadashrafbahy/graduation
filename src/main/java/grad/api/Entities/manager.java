@@ -196,7 +196,7 @@ public class manager {
 
     
     
-    @OneToMany(cascade=CascadeType.ALL  , targetEntity=task.class)
+    @OneToMany(fetch = FetchType.EAGER,cascade=CascadeType.ALL  , targetEntity=task.class)
     @JoinTable (name = "mng_task" ,joinColumns = {@JoinColumn(name = "mng_id")},inverseJoinColumns = {@JoinColumn(name="tsk_id")})
 	public List<task> getTsk_list() {
 		return tsk_list;
